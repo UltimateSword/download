@@ -15,4 +15,10 @@ def download():
         if 'youtubue' in domain:
             continue
         else:
-            os.system('wget -u {} -user {} -password {}'.format(t.url, t.user, t.password))
+            rep = os.system('wget -u {} -user {} -password {}'.format(t.url, t.user, t.password))
+            if rep == 0:
+                t.status = 1
+            else:
+                t.status = 2
+    db.session.commit()
+

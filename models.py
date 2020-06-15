@@ -1,11 +1,6 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from ext import db
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///download.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-db = SQLAlchemy(app)
 
 """
 CREATE TABLE DOWNLOAD(
@@ -29,7 +24,7 @@ class Download(db.Model):
     pwd = db.Column(db.String(120), unique=False)
     url = db.Column(db.TEXT, unique=False)
     status = db.Column(db.Integer, unique=False)  # 0,1,2 未完成 已完成 失败
-    saved = db.Column(db.Integer, unique=False)  # 0, 1 是否本地已有保存
+    saved = db.Column(db.Integer, unique=False)  # 0, 1, 2 未下载 已下载 已删除
     task_id = db.Column(db.String(500), unique=True)
     file = db.Column(db.String(510), unique=True)
     update_time = db.Column(db.DateTime, unique=False)
@@ -42,7 +37,7 @@ class Download(db.Model):
         self.status = status
         self.saved = saved
         self.update_time = update_time
-        self.file = file
+        self.file = task_id + file
 
     def __repr__(self):
         return '<task %r>' % self.task_id
